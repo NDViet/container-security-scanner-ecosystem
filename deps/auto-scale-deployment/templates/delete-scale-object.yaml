@@ -1,0 +1,37 @@
+{{- if and .Values.scaleTargetRef.kind .Values.scaleTargetRef.name }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ template "auto-scale-deployment.fullname" . }}
+  labels:
+    app: {{ template "auto-scale-deployment.name" . }}
+    chart: {{ template "auto-scale-deployment.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": pre-delete,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  scaleTargetRef:
+    kind: {{ .Values.scaleTargetRef.kind }}
+    name: {{ .Release.Name }}-{{ .Values.scaleTargetRef.name }}
+  {{- if .Values.idleReplicaCount }}
+  idleReplicaCount: {{ .Values.idleReplicaCount }}
+  {{- end }}
+  {{- if .Values.minReplicaCount }}
+  minReplicaCount: {{ .Values.minReplicaCount }}
+  {{- end }}
+  {{- if .Values.maxReplicaCount }}
+  maxReplicaCount: {{ .Values.maxReplicaCount }}
+  {{- end }}
+  {{- if .Values.cooldownPeriod }}
+  cooldownPeriod: {{ .Values.cooldownPeriod }}
+  {{- end }}
+  {{- if .Values.pollingInterval }}
+  pollingInterval: {{ .Values.pollingInterval }}
+  {{- end }}
+  {{- if .Values.triggers }}
+  triggers:
+    {{- toYaml .Values.triggers | nindent 4 -}}
+  {{- end }}
+{{- end }}

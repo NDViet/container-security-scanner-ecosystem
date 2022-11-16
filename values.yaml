@@ -1,0 +1,173 @@
+tags:
+  full: true
+  anchore-engine: true
+  monitoring: true
+  autoscaler: true
+  docker-registry: true
+
+anchore-engine:
+  #enabled: true
+  ingress:
+    enabled: true
+    apiPath: /v1/
+    uiPath: /ui/
+  postgresql:
+    persistence:
+      size: 50Gi
+  anchoreGlobal:
+    defaultAdminPassword: &defaultAdminPassword 'admin@123'
+    enableMetrics: true
+    #metricsAuthDisabled: true
+    #policyBundles:
+  anchoreApi:
+    service:
+      type: ClusterIP
+  anchorePolicyEngine:
+    vulnerabilityProvider: 'legacy'
+  anchoreAnalyzer:
+    concurrentTasksPerWorker: 1
+    layerCacheMaxGigabytes: 20
+  anchoreCatalog:
+    createServiceAccount: true
+  anchoreEngineUpgradeJob:
+    enabled: false
+
+ingress-nginx:
+  #enabled: true
+  controller:
+    admissionWebhooks:
+      enabled: false
+    hostNetwork: true
+    kind: DaemonSet
+    service:
+      type: ClusterIP
+  tcp:
+    8228: "{{ .Release.Namespace }}/{{ .Release.Name }}-anchore-engine-api:8228"
+    9091: "{{ .Release.Namespace }}/prometheus-operated:9090"
+    3000: "{{ .Release.Namespace }}/{{ .Release.Name }}-grafana:80"
+    9000: "{{ .Release.Namespace }}/{{ .Release.Name }}-docker-registry:5000"
+    8081: "{{ .Release.Namespace }}/{{ .Release.Name }}-jenkins:8080"
+    50000: "{{ .Release.Namespace }}/{{ .Release.Name }}-jenkins-agent:50000"
+
+#keda:
+  #enabled: true
+
+docker-registry:
+  #enabled: true
+  persistence:
+    accessMode: 'ReadWriteOnce'
+    enabled: true
+    size: 50Gi
+
+swaggerui:
+  enabled: false
+  swaggerui :
+    jsonUrl : "http://localhost/v1/swagger.json"
+    server :
+      url: "http://localhost/v1"
+      description: "Anchore Engine"
+  service:
+    type: ClusterIP
+  #ingress:
+    #enabled: false
+
+kube-prometheus-stack:
+  #enabled: true
+  alertmanager:
+    enabled: false
+  grafana:
+    enabled: true
+    adminPassword: *defaultAdminPassword
+  prometheus:
+    enabled: true
+    prometheusSpec:
+      additionalScrapeConfigs:
+        - job_name: anchore-engine-api
+          scrape_interval: 10s
+          scrape_timeout: 5s
+          metrics_path: /metrics
+          scheme: http
+          static_configs:
+            - targets:
+                - "{{ .Release.Name }}-anchore-engine-api:8228"
+          basic_auth:
+            username: admin
+            password: *defaultAdminPassword
+        - job_name: anchore-engine-catalog
+          scrape_interval: 10s
+          scrape_timeout: 5s
+          metrics_path: /metrics
+          scheme: http
+          static_configs:
+            - targets:
+                - "{{ .Release.Name }}-anchore-engine-catalog:8082"
+          basic_auth:
+            username: admin
+            password: *defaultAdminPassword
+        - job_name: anchore-engine-policy
+          scrape_interval: 10s
+          scrape_timeout: 5s
+          metrics_path: /metrics
+          scheme: http
+          static_configs:
+            - targets:
+                - "{{ .Release.Name }}-anchore-engine-policy:8087"
+          basic_auth:
+            username: admin
+            password: *defaultAdminPassword
+        - job_name: anchore-engine-simplequeue
+          scrape_interval: 10s
+          scrape_timeout: 5s
+          metrics_path: /metrics
+          scheme: http
+          static_configs:
+            - targets:
+                - "{{ .Release.Name }}-anchore-engine-simplequeue:8083"
+          basic_auth:
+            username: admin
+            password: *defaultAdminPassword
+        - job_name: anchore-engine-analyzer
+          scrape_interval: 10s
+          scrape_timeout: 5s
+          metrics_path: /metrics
+          scheme: http
+          static_configs:
+            - targets:
+                - "{{ .Release.Name }}-anchore-engine-analyzer:8084"
+          basic_auth:
+            username: admin
+            password: *defaultAdminPassword
+
+anchore-auto-scale:
+  #enabled: true
+  anchore-analyzer-auto-scale:
+    enabled: true
+    scaleTargetRef:
+      kind: Deployment
+      name: anchore-engine-analyzer
+    #idleReplicaCount: 1
+    minReplicaCount: 1
+    maxReplicaCount: 15
+    cooldownPeriod: 30
+    pollingInterval: 15
+    triggers:
+      - type: prometheus
+        metadata:
+          serverAddress: http://prometheus-operated:9090
+          metricName: "anchore-analyzer-auto-scale"
+          query: |
+            sum(rate(anchore_queue_length{queuename="images_to_analyze"}[60m])) * 1000
+          threshold: "1"
+
+jenkins:
+  enabled: true
+  controller:
+    numExecutors: 5
+    adminPassword: *defaultAdminPassword
+    installLatestSpecifiedPlugins: true
+    additionalPlugins:
+      - anchore-container-scanner:1.0.23
+      - groovy:2.4
+      - blueocean:1.25.1
+    prometheus:
+      enabled: true

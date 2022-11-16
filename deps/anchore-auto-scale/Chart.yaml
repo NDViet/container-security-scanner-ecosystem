@@ -1,0 +1,34 @@
+apiVersion: v2
+appVersion: 21.11.0
+dependencies:
+- alias: anchore-api-auto-scale
+  condition: anchore-api-auto-scale.enabled
+  name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+- alias: anchore-analyzer-auto-scale
+  condition: anchore-analyzer-auto-scale.enabled
+  name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+- alias: anchore-policy-auto-scale
+  condition: anchore-policy-auto-scale.enabled
+  name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+- alias: anchore-catalog-auto-scale
+  condition: anchore-catalog-auto-scale.enabled
+  name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+- alias: anchore-simplequeue-auto-scale
+  condition: anchore-simplequeue-auto-scale.enabled
+  name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+description: A Helm chart for Anchore Engine Deployment Auto Scale
+maintainers:
+- email: nd-viet@outlook.com
+  name: Viet Nguyen Duc
+name: anchore-auto-scale
+version: 21.11.0

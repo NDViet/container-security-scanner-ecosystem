@@ -1,0 +1,89 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.42">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>BUILD</name>
+          <defaultValue>21.12.0-MAIN_21759</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>ENGINE_URL</name>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>http://anchore-engine2:8228/v1/</string>
+              <string>http://anchore-engine2/v1/</string>
+              <string>http://anchore-engine:8228/v1/</string>
+              <string>https://anchore-engine/v1</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>ENGINE_CREDENTIALS</name>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>anchore_admin_local</string>
+              <string>anchore_pipeline</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>REGISTRY</name>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>artifactory1:9000</string>
+              <string>artifactory2:9000</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.94">
+    <script>listImages = []
+artifactoryURL = params.REGISTRY
+node {
+    stage(&apos;Checkout&apos;) {
+        print &apos;checkout&apos;
+    }
+    stage(&apos;Build&apos;) {
+        print &apos;build&apos;
+    }
+    stage(&apos;UT&apos;) {
+        print &apos;UT&apos;
+    }
+    stage(&apos;Deploy Artifacts&apos;) {
+        print &apos;deploy&apos;
+    }
+    stage(&apos;Validation&apos;) {
+        scanImages()
+    }
+    stage(&apos;Deploy Artifacts CR&apos;) {
+        print &apos;promotion&apos;
+    }
+}
+
+def prepareListImages() {
+    def imageLine = &apos;&apos;
+    for (image in listImages) {
+        imageLine += artifactoryURL + &apos;/&apos; + image + &apos;:&apos; + params.BUILD + &apos;\n&apos;
+    }
+    return imageLine
+}
+
+def scanImages() {
+    def imageLine = prepareListImages()
+    writeFile file: &apos;list_images&apos;, text: imageLine
+    anchore name: &apos;list_images&apos;, engineurl: params.ENGINE_URL, engineCredentialsId: params.ENGINE_CREDENTIALS, engineverify: true, bailOnFail: false, bailOnPluginFail: false
+}
+
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

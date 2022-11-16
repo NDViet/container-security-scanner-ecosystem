@@ -1,0 +1,27 @@
+dependencies:
+- name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.0.6
+- name: keda
+  repository: https://kedacore.github.io/charts
+  version: 2.4.0
+- name: kube-prometheus-stack
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 19.2.2
+- name: swaggerui
+  repository: https://cetic.github.io/helm-charts
+  version: 0.3.3
+- name: jenkins
+  repository: https://charts.jenkins.io
+  version: 3.8.8
+- name: docker-registry
+  repository: https://helm.twun.io
+  version: 1.14.0
+- name: anchore-engine
+  repository: https://charts.anchore.io
+  version: 1.15.1
+- name: anchore-auto-scale
+  repository: file://./deps/anchore-auto-scale
+  version: 21.11.0
+digest: sha256:f38e25ac0a999e3ba6474b0dcb7742947296e2431047bbc699385b6069940590
+generated: "2021-11-16T02:18:48.758275995+05:30"

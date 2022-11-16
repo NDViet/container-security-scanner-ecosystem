@@ -1,0 +1,14 @@
+anchore-api-auto-scale:
+  enabled: false
+
+anchore-analyzer-auto-scale:
+  enabled: false
+
+anchore-policy-auto-scale:
+  enabled: false
+
+anchore-catalog-auto-scale:
+  enabled: false
+
+anchore-simplequeue-auto-scale:
+  enabled: false

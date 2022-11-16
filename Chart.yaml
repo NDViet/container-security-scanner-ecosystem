@@ -1,0 +1,67 @@
+apiVersion: v2
+appVersion: 21.11.0
+dependencies:
+- condition: ingress-nginx.enabled
+  name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.0.6
+  tags:
+    - full
+    - ingress-controller
+- condition: anchore-engine.anchoreGlobal.enableMetrics,keda.enabled
+  name: keda
+  repository: https://kedacore.github.io/charts
+  version: 2.4.0
+  tags:
+    - full
+    - keda
+    - autoscaler
+- condition: anchore-engine.anchoreGlobal.enableMetrics,kube-prometheus-stack.enabled
+  name: kube-prometheus-stack
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 19.2.2
+  tags:
+    - full
+    - monitoring
+    - autoscaler
+- condition: swaggerui.enabled
+  name: swaggerui
+  repository: https://cetic.github.io/helm-charts
+  version: 0.3.3
+- condition: jenkinsci.enabled
+  name: jenkins
+  repository: https://charts.jenkins.io
+  version: 3.8.8
+- condition: docker-registry.enabled
+  name: docker-registry
+  repository: https://helm.twun.io
+  version: 1.14.0
+  tags:
+    - full
+    - docker-registry
+- condition: anchore-engine.enabled
+  name: anchore-engine
+  repository: https://charts.anchore.io
+  version: 1.15.1
+  tags:
+    - full
+    - anchore-engine
+- condition: anchore-auto-scale.enabled
+  name: anchore-auto-scale
+  repository: file://./deps/anchore-auto-scale
+  version: 21.11.0
+  tags:
+    - full
+    - autoscaler
+description: Container Security Scanner Ecosystem Deployment
+keywords:
+- anchore-engine
+- ingress-nginx
+- kedacore
+- kube-prometheus-stack
+- grafana
+maintainers:
+- email: nd-viet@outlook.com
+  name: Viet Nguyen Duc
+name: container-security-scanner-ecosystem
+version: 21.11.0

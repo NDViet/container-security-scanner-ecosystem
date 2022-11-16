@@ -1,0 +1,8 @@
+apiVersion: v2
+appVersion: 21.11.0
+description: A Helm chart for Keda ScaledObject
+maintainers:
+- email: nd-viet@outlook.com
+  name: Viet Nguyen Duc
+name: auto-scale-deployment
+version: 21.11.0

@@ -1,0 +1,18 @@
+dependencies:
+- name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+- name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+- name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+- name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+- name: auto-scale-deployment
+  repository: file://../auto-scale-deployment
+  version: 21.11.0
+digest: sha256:68e5482bd380f00949c2b95bfc30836b2bef17834613b4d7fce837f77a10466f
+generated: "2021-11-02T08:14:37.701574164+05:30"
