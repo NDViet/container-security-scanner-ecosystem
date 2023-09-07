@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.ndviet</groupId>
+        <artifactId>container-security-scanner-ecosystem</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>infra-ecosystem</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>helm-repo-add</id>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <target>
+                                <exec executable="${exec.executable}">
+                                    <arg value="${exec.overrides}"/>
+                                    <arg value="helm repo add ${chart.anchore-engine.name} ${chart.anchore-engine.repository}"/>
+                                </exec>
+                                <exec executable="${exec.executable}">
+                                    <arg value="${exec.overrides}"/>
+                                    <arg value="helm repo add ${chart.ingress.name} ${chart.ingress.repository}"/>
+                                </exec>
+                                <exec executable="${exec.executable}">
+                                    <arg value="${exec.overrides}"/>
+                                    <arg value="helm repo add ${chart.keda.name} ${chart.keda.repository}"/>
+                                </exec>
+                                <exec executable="${exec.executable}">
+                                    <arg value="${exec.overrides}"/>
+                                    <arg value="helm repo add ${chart.docker-registry.name} ${chart.docker-registry.repository}"/>
+                                </exec>
+                                <exec executable="${exec.executable}">
+                                    <arg value="${exec.overrides}"/>
+                                    <arg value="helm repo add ${chart.swaggerui.name} ${chart.swaggerui.repository}"/>
+                                </exec>
+                                <exec executable="${exec.executable}">
+                                    <arg value="${exec.overrides}"/>
+                                    <arg value="helm repo add ${chart.jenkins.name} ${chart.jenkins.repository}"/>
+                                </exec>
+                                <exec executable="${exec.executable}">
+                                    <arg value="${exec.overrides}"/>
+                                    <arg value="helm repo add ${chart.pts-stack.name} ${chart.pts-stack.repository}"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.kokuwa.maven</groupId>
+                <artifactId>helm-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>helm-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>dependency-build</goal>
+                            <goal>lint</goal>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <chartDirectory>${project.basedir}/src/main/resources</chartDirectory>
+                    <chartVersion>${project.version}</chartVersion>
+                    <outputDirectory>${project.parent.build.directory}/helm/repo</outputDirectory>
+                    <lintStrict>true</lintStrict>
+                    <useLocalHelmBinary>true</useLocalHelmBinary>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

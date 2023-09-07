@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.ndviet</groupId>
+    <artifactId>container-security-scanner-ecosystem</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>auto-scale-deployment</module>
+        <module>anchore-auto-scale</module>
+        <module>infra-ecosystem</module>
+    </modules>
+
+    <properties>
+        <revision>23.9.4</revision>
+        <exec.executable>bash</exec.executable>
+        <exec.overrides>-c</exec.overrides>
+        <chart.this.version>${project.version}</chart.this.version>
+        <chart.ingress.name>ingress-nginx</chart.ingress.name>
+        <chart.ingress.repository>https://kubernetes.github.io/ingress-nginx</chart.ingress.repository>
+        <chart.ingress.version>4.7.1</chart.ingress.version>
+        <chart.keda.name>keda</chart.keda.name>
+        <chart.keda.repository>https://kedacore.github.io/charts</chart.keda.repository>
+        <chart.keda.version>2.11.2</chart.keda.version>
+        <chart.pts-stack.name>kube-prometheus-stack</chart.pts-stack.name>
+        <chart.pts-stack.repository>https://prometheus-community.github.io/helm-charts</chart.pts-stack.repository>
+        <chart.pts-stack.version>19.2.2</chart.pts-stack.version>
+        <chart.swaggerui.name>swaggerui</chart.swaggerui.name>
+        <chart.swaggerui.repository>https://cetic.github.io/helm-charts</chart.swaggerui.repository>
+        <chart.swaggerui.version>0.3.3</chart.swaggerui.version>
+        <chart.jenkins.name>jenkins</chart.jenkins.name>
+        <chart.jenkins.repository>https://charts.jenkins.io</chart.jenkins.repository>
+        <chart.jenkins.version>3.8.8</chart.jenkins.version>
+        <chart.docker-registry.name>docker-registry</chart.docker-registry.name>
+        <chart.docker-registry.repository>https://helm.twun.io</chart.docker-registry.repository>
+        <chart.docker-registry.version>1.14.0</chart.docker-registry.version>
+        <chart.anchore-engine.name>anchore-engine</chart.anchore-engine.name>
+        <chart.anchore-engine.repository>https://charts.anchore.io</chart.anchore-engine.repository>
+        <chart.anchore-engine.version>1.15.1</chart.anchore-engine.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>set-executable-based-os</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <exec.executable>cmd</exec.executable>
+                <exec.overrides>/C</exec.overrides>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>generate-chart-yaml</id>
+                            <phase>validate</phase>
+                            <configuration>
+                                <target>
+                                    <copy file="src/main/resources/${project.name}/Chart_template.yaml"
+                                          tofile="src/main/resources/${project.name}/Chart.yaml">
+                                        <filterset>
+                                            <filter token="chart.this.version" value="${chart.this.version}"/>
+                                            <filter token="chart.anchore-engine.name" value="${chart.anchore-engine.name}"/>
+                                            <filter token="chart.anchore-engine.repository" value="${chart.anchore-engine.repository}"/>
+                                            <filter token="chart.anchore-engine.version" value="${chart.anchore-engine.version}"/>
+                                            <filter token="chart.docker-registry.name" value="${chart.docker-registry.name}"/>
+                                            <filter token="chart.docker-registry.repository" value="${chart.docker-registry.repository}"/>
+                                            <filter token="chart.docker-registry.version" value="${chart.docker-registry.version}"/>
+                                            <filter token="chart.jenkins.name" value="${chart.jenkins.name}"/>
+                                            <filter token="chart.jenkins.repository" value="${chart.jenkins.repository}"/>
+                                            <filter token="chart.jenkins.version" value="${chart.jenkins.version}"/>
+                                            <filter token="chart.swaggerui.name" value="${chart.swaggerui.name}"/>
+                                            <filter token="chart.swaggerui.repository" value="${chart.swaggerui.repository}"/>
+                                            <filter token="chart.swaggerui.version" value="${chart.swaggerui.version}"/>
+                                            <filter token="chart.pts-stack.name" value="${chart.pts-stack.name}"/>
+                                            <filter token="chart.pts-stack.repository" value="${chart.pts-stack.repository}"/>
+                                            <filter token="chart.pts-stack.version" value="${chart.pts-stack.version}"/>
+                                            <filter token="chart.ingress.name" value="${chart.ingress.name}"/>
+                                            <filter token="chart.ingress.repository" value="${chart.ingress.repository}"/>
+                                            <filter token="chart.ingress.version" value="${chart.ingress.version}"/>
+                                            <filter token="chart.keda.name" value="${chart.keda.name}"/>
+                                            <filter token="chart.keda.repository" value="${chart.keda.repository}"/>
+                                            <filter token="chart.keda.version" value="${chart.keda.version}"/>
+                                        </filterset>
+                                    </copy>
+                                </target>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>clean-chart-lock</id>
+                            <phase>clean</phase>
+                            <configuration>
+                                <target>
+                                    <delete failonerror="false"
+                                            dir="src/main/resources/${project.name}/charts"/>
+                                    <delete failonerror="false">
+                                        <fileset dir="." includes="**/*.lock"/>
+                                        <fileset dir="." includes="**/Chart.yaml"/>
+                                    </delete>
+                                </target>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>io.kokuwa.maven</groupId>
+                    <artifactId>helm-maven-plugin</artifactId>
+                    <version>6.6.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

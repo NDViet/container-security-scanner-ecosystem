@@ -1,0 +1,67 @@
+apiVersion: v2
+appVersion: @chart.this.version@
+dependencies:
+- condition: ingress-nginx.enabled
+  name: @chart.ingress.name@
+  repository: @chart.ingress.repository@
+  version: @chart.ingress.version@
+  tags:
+    - full
+    - ingress-controller
+- condition: anchore-engine.anchoreGlobal.enableMetrics,keda.enabled
+  name: @chart.keda.name@
+  repository: @chart.keda.repository@
+  version: @chart.keda.version@
+  tags:
+    - full
+    - keda
+    - autoscaler
+- condition: anchore-engine.anchoreGlobal.enableMetrics,kube-prometheus-stack.enabled
+  name: @chart.pts-stack.name@
+  repository: @chart.pts-stack.repository@
+  version: @chart.pts-stack.version@
+  tags:
+    - full
+    - monitoring
+    - autoscaler
+- condition: swaggerui.enabled
+  name: @chart.swaggerui.name@
+  repository: @chart.swaggerui.repository@
+  version: @chart.swaggerui.version@
+- condition: jenkinsci.enabled
+  name: @chart.jenkins.name@
+  repository: @chart.jenkins.repository@
+  version: @chart.jenkins.version@
+- condition: docker-registry.enabled
+  name: @chart.docker-registry.name@
+  repository: @chart.docker-registry.repository@
+  version: @chart.docker-registry.version@
+  tags:
+    - full
+    - docker-registry
+- condition: anchore-engine.enabled
+  name: @chart.anchore-engine.name@
+  repository: @chart.anchore-engine.repository@
+  version: @chart.anchore-engine.version@
+  tags:
+    - full
+    - anchore-engine
+- condition: anchore-auto-scale.enabled
+  name: anchore-auto-scale
+  repository: file://../../../../../anchore-auto-scale/src/main/resources/anchore-auto-scale
+  version: @chart.this.version@
+  tags:
+    - full
+    - autoscaler
+description: Container Security Scanner Ecosystem Deployment
+keywords:
+- anchore-engine
+- ingress-nginx
+- kedacore
+- kube-prometheus-stack
+- grafana
+maintainers:
+- email: nd-viet@outlook.com
+  name: Viet Nguyen Duc
+name: container-security-scanner-ecosystem
+version: @chart.this.version@
