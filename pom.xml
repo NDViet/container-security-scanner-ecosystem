@@ -27,19 +27,19 @@
         <chart.keda.version>2.11.2</chart.keda.version>
         <chart.pts-stack.name>kube-prometheus-stack</chart.pts-stack.name>
         <chart.pts-stack.repository>https://prometheus-community.github.io/helm-charts</chart.pts-stack.repository>
-        <chart.pts-stack.version>19.2.2</chart.pts-stack.version>
+        <chart.pts-stack.version>50.3.1</chart.pts-stack.version>
         <chart.swaggerui.name>swaggerui</chart.swaggerui.name>
         <chart.swaggerui.repository>https://cetic.github.io/helm-charts</chart.swaggerui.repository>
-        <chart.swaggerui.version>0.3.3</chart.swaggerui.version>
+        <chart.swaggerui.version>0.3.6</chart.swaggerui.version>
         <chart.jenkins.name>jenkins</chart.jenkins.name>
         <chart.jenkins.repository>https://charts.jenkins.io</chart.jenkins.repository>
-        <chart.jenkins.version>3.8.8</chart.jenkins.version>
+        <chart.jenkins.version>4.6.2</chart.jenkins.version>
         <chart.docker-registry.name>docker-registry</chart.docker-registry.name>
         <chart.docker-registry.repository>https://helm.twun.io</chart.docker-registry.repository>
-        <chart.docker-registry.version>1.14.0</chart.docker-registry.version>
+        <chart.docker-registry.version>2.2.2</chart.docker-registry.version>
         <chart.anchore-engine.name>anchore-engine</chart.anchore-engine.name>
         <chart.anchore-engine.repository>https://charts.anchore.io</chart.anchore-engine.repository>
-        <chart.anchore-engine.version>1.15.1</chart.anchore-engine.version>
+        <chart.anchore-engine.version>1.27.2</chart.anchore-engine.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
