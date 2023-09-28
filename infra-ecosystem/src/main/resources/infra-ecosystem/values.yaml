@@ -1,8 +1,10 @@
 tags:
-  full: true
-  anchore-engine: true
+  full: false
+  ingress-controller: true
+  keda: true
+  anchore-engine: false
   monitoring: true
-  autoscaler: true
+  autoscaler: false
   docker-registry: true
 
 anchore-engine:
@@ -43,10 +45,10 @@ ingress-nginx:
       type: ClusterIP
   tcp:
     8228: "{{ .Release.Namespace }}/{{ .Release.Name }}-anchore-engine-api:8228"
-    9091: "{{ .Release.Namespace }}/prometheus-operated:9090"
+    9090: "{{ .Release.Namespace }}/prometheus-operated:9090"
     3000: "{{ .Release.Namespace }}/{{ .Release.Name }}-grafana:80"
     9000: "{{ .Release.Namespace }}/{{ .Release.Name }}-docker-registry:5000"
-    8081: "{{ .Release.Namespace }}/{{ .Release.Name }}-jenkins:8080"
+    8080: "{{ .Release.Namespace }}/{{ .Release.Name }}-jenkins:8080"
     50000: "{{ .Release.Namespace }}/{{ .Release.Name }}-jenkins-agent:50000"
 
 #keda:
@@ -161,13 +163,12 @@ anchore-auto-scale:
 
 jenkins:
   enabled: true
+  persistence:
+    existingClaim: jenkins-master-pvclaim
+    size: "50Gi"
   controller:
-    numExecutors: 5
     adminPassword: *defaultAdminPassword
-    installLatestSpecifiedPlugins: true
-    additionalPlugins:
-      - anchore-container-scanner:1.0.23
-      - groovy:2.4
-      - blueocean:1.25.1
+    installLatestSpecifiedPlugins: false
+    additionalPlugins: []
     prometheus:
       enabled: true
