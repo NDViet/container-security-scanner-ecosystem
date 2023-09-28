@@ -74,15 +74,27 @@ swaggerui:
     #enabled: false
 
 kube-prometheus-stack:
+  fullnameOverride: monitoring
   #enabled: true
   alertmanager:
-    enabled: false
+    enabled: true
   grafana:
     enabled: true
     adminPassword: *defaultAdminPassword
   prometheus:
     enabled: true
     prometheusSpec:
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: "standard"
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 50Gi
+            selector:
+              matchLabels:
+                app.kubernetes.io/name: "prometheus"
       additionalScrapeConfigs:
         - job_name: anchore-engine-api
           scrape_interval: 10s
@@ -164,7 +176,7 @@ anchore-auto-scale:
 jenkins:
   enabled: true
   persistence:
-    existingClaim: jenkins-master-pvclaim
+    enabled: true
     size: "50Gi"
   controller:
     adminPassword: *defaultAdminPassword

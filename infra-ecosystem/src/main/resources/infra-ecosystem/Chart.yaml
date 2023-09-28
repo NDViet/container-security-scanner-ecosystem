@@ -8,6 +8,7 @@ dependencies:
   tags:
     - full
     - ingress-controller
+
 - condition: anchore-engine.anchoreGlobal.enableMetrics,keda.enabled
   name: ${chart.keda.name}
   repository: ${chart.keda.repository}
@@ -16,6 +17,7 @@ dependencies:
     - full
     - keda
     - autoscaler
+
 - condition: anchore-engine.anchoreGlobal.enableMetrics,kube-prometheus-stack.enabled
   name: ${chart.pts-stack.name}
   repository: ${chart.pts-stack.repository}
@@ -24,14 +26,17 @@ dependencies:
     - full
     - monitoring
     - autoscaler
+
 - condition: swaggerui.enabled
   name: ${chart.swaggerui.name}
   repository: ${chart.swaggerui.repository}
   version: ${chart.swaggerui.version}
+
 - condition: jenkinsci.enabled
   name: ${chart.jenkins.name}
   repository: ${chart.jenkins.repository}
   version: ${chart.jenkins.version}
+
 - condition: docker-registry.enabled
   name: ${chart.docker-registry.name}
   repository: ${chart.docker-registry.repository}
@@ -39,6 +44,7 @@ dependencies:
   tags:
     - full
     - docker-registry
+
 - condition: anchore-engine.enabled
   name: ${chart.anchore-engine.name}
   repository: ${chart.anchore-engine.repository}
@@ -46,6 +52,7 @@ dependencies:
   tags:
     - full
     - anchore-engine
+
 - condition: anchore-auto-scale.enabled
   name: anchore-auto-scale
   repository: file://../../../../anchore-auto-scale/target/classes/anchore-auto-scale
@@ -53,6 +60,7 @@ dependencies:
   tags:
     - full
     - autoscaler
+
 description: Container Security Scanner Ecosystem Deployment
 keywords:
 - anchore-engine

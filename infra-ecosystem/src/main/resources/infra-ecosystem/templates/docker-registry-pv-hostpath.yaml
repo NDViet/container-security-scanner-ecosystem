@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: jenkins-pv-hostpath
+  name: docker-registry-pv-hostpath
   labels:
-    component: jenkins
+    component: docker-registry
     release: {{ .Release.Name }}
     namespace: {{ .Release.Namespace }}
     heritage: {{ .Release.Service }}
@@ -13,8 +13,8 @@ spec:
   capacity:
     storage: "50Gi"
   claimRef:
-    name: {{ .Release.Name }}-jenkins
+    name: {{ .Release.Name }}-docker-registry
     namespace: {{ .Release.Namespace }}
   hostPath:
-    path: "/testops/local/jenkins/"
+    path: "/testops/local/docker-registry/"
   persistentVolumeReclaimPolicy: Retain

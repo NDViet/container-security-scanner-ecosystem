@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: jenkins-pv-hostpath
+  name: prometheus-pv-hostpath
   labels:
-    component: jenkins
+    app.kubernetes.io/name: prometheus
     release: {{ .Release.Name }}
     namespace: {{ .Release.Namespace }}
     heritage: {{ .Release.Service }}
 spec:
+  capacity:
+    storage: 50Gi
   accessModes:
     - ReadWriteOnce
-  capacity:
-    storage: "50Gi"
   claimRef:
-    name: {{ .Release.Name }}-jenkins
+    name: prometheus-monitoring-prometheus-db-prometheus-monitoring-prometheus-0
     namespace: {{ .Release.Namespace }}
   hostPath:
-    path: "/testops/local/jenkins/"
+    path: "/testops/local/prometheus/"
   persistentVolumeReclaimPolicy: Retain
