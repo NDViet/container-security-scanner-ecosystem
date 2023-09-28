@@ -64,48 +64,29 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>templating-maven-plugin</artifactId>
+                    <version>1.0.0</version>
+                    <extensions>true</extensions>
+                    <executions>
+                        <execution>
+                            <id>chart-src-template</id>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>filter-sources</goal>
+                            </goals>
+                            <configuration>
+                                <sourceDirectory>${basedir}/src/main/resources</sourceDirectory>
+                                <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>3.1.0</version>
                     <executions>
-                        <execution>
-                            <id>generate-chart-yaml</id>
-                            <phase>validate</phase>
-                            <configuration>
-                                <target>
-                                    <copy file="src/main/resources/${project.name}/Chart_template.yaml"
-                                          tofile="src/main/resources/${project.name}/Chart.yaml">
-                                        <filterset>
-                                            <filter token="chart.this.version" value="${chart.this.version}"/>
-                                            <filter token="chart.anchore-engine.name" value="${chart.anchore-engine.name}"/>
-                                            <filter token="chart.anchore-engine.repository" value="${chart.anchore-engine.repository}"/>
-                                            <filter token="chart.anchore-engine.version" value="${chart.anchore-engine.version}"/>
-                                            <filter token="chart.docker-registry.name" value="${chart.docker-registry.name}"/>
-                                            <filter token="chart.docker-registry.repository" value="${chart.docker-registry.repository}"/>
-                                            <filter token="chart.docker-registry.version" value="${chart.docker-registry.version}"/>
-                                            <filter token="chart.jenkins.name" value="${chart.jenkins.name}"/>
-                                            <filter token="chart.jenkins.repository" value="${chart.jenkins.repository}"/>
-                                            <filter token="chart.jenkins.version" value="${chart.jenkins.version}"/>
-                                            <filter token="chart.swaggerui.name" value="${chart.swaggerui.name}"/>
-                                            <filter token="chart.swaggerui.repository" value="${chart.swaggerui.repository}"/>
-                                            <filter token="chart.swaggerui.version" value="${chart.swaggerui.version}"/>
-                                            <filter token="chart.pts-stack.name" value="${chart.pts-stack.name}"/>
-                                            <filter token="chart.pts-stack.repository" value="${chart.pts-stack.repository}"/>
-                                            <filter token="chart.pts-stack.version" value="${chart.pts-stack.version}"/>
-                                            <filter token="chart.ingress.name" value="${chart.ingress.name}"/>
-                                            <filter token="chart.ingress.repository" value="${chart.ingress.repository}"/>
-                                            <filter token="chart.ingress.version" value="${chart.ingress.version}"/>
-                                            <filter token="chart.keda.name" value="${chart.keda.name}"/>
-                                            <filter token="chart.keda.repository" value="${chart.keda.repository}"/>
-                                            <filter token="chart.keda.version" value="${chart.keda.version}"/>
-                                        </filterset>
-                                    </copy>
-                                </target>
-                            </configuration>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                        </execution>
-
                         <execution>
                             <id>clean-chart-lock</id>
                             <phase>clean</phase>
@@ -115,7 +96,6 @@
                                             dir="src/main/resources/${project.name}/charts"/>
                                     <delete failonerror="false">
                                         <fileset dir="." includes="**/*.lock"/>
-                                        <fileset dir="." includes="**/Chart.yaml"/>
                                     </delete>
                                 </target>
                             </configuration>
@@ -130,6 +110,13 @@
                     <groupId>io.kokuwa.maven</groupId>
                     <artifactId>helm-maven-plugin</artifactId>
                     <version>6.6.1</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <chartDirectory>${project.build.directory}/classes</chartDirectory>
+                        <chartVersion>${project.version}</chartVersion>
+                        <useLocalHelmBinary>true</useLocalHelmBinary>
+                        <autoDetectLocalHelmBinary>true</autoDetectLocalHelmBinary>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

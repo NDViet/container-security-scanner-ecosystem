@@ -14,6 +14,11 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
@@ -74,11 +79,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <chartDirectory>${project.basedir}/src/main/resources</chartDirectory>
-                    <chartVersion>${project.version}</chartVersion>
                     <outputDirectory>${project.parent.build.directory}/helm/repo</outputDirectory>
                     <lintStrict>true</lintStrict>
-                    <useLocalHelmBinary>true</useLocalHelmBinary>
                 </configuration>
             </plugin>
         </plugins>

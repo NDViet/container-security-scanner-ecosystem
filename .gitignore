@@ -37,5 +37,3 @@ build/
 ### Helm ###
 **/*.tgz
 **/*.lock
-**/patch-selenium-grid/charts
-**/Chart.yaml

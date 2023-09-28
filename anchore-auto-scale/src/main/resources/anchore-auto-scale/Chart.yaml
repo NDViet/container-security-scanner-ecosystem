@@ -1,34 +1,34 @@
 apiVersion: v2
-appVersion: @chart.this.version@
+appVersion: ${chart.this.version}
 dependencies:
 - alias: anchore-api-auto-scale
   condition: anchore-api-auto-scale.enabled
   name: auto-scale-deployment
-  repository: file://../../../../../auto-scale-deployment/src/main/resources/auto-scale-deployment
-  version: @chart.this.version@
+  repository: file://../../../../auto-scale-deployment/target/classes/auto-scale-deployment
+  version: ${chart.this.version}
 - alias: anchore-analyzer-auto-scale
   condition: anchore-analyzer-auto-scale.enabled
   name: auto-scale-deployment
-  repository: file://../../../../../auto-scale-deployment/src/main/resources/auto-scale-deployment
-  version: @chart.this.version@
+  repository: file://../../../../auto-scale-deployment/target/classes/auto-scale-deployment
+  version: ${chart.this.version}
 - alias: anchore-policy-auto-scale
   condition: anchore-policy-auto-scale.enabled
   name: auto-scale-deployment
-  repository: file://../../../../../auto-scale-deployment/src/main/resources/auto-scale-deployment
-  version: @chart.this.version@
+  repository: file://../../../../auto-scale-deployment/target/classes/auto-scale-deployment
+  version: ${chart.this.version}
 - alias: anchore-catalog-auto-scale
   condition: anchore-catalog-auto-scale.enabled
   name: auto-scale-deployment
-  repository: file://../../../../../auto-scale-deployment/src/main/resources/auto-scale-deployment
-  version: @chart.this.version@
+  repository: file://../../../../auto-scale-deployment/target/classes/auto-scale-deployment
+  version: ${chart.this.version}
 - alias: anchore-simplequeue-auto-scale
   condition: anchore-simplequeue-auto-scale.enabled
   name: auto-scale-deployment
-  repository: file://../../../../../auto-scale-deployment/src/main/resources/auto-scale-deployment
-  version: @chart.this.version@
+  repository: file://../../../../auto-scale-deployment/target/classes/auto-scale-deployment
+  version: ${chart.this.version}
 description: A Helm chart for Anchore Engine Deployment Auto Scale
 maintainers:
 - email: nd-viet@outlook.com
   name: Viet Nguyen Duc
 name: anchore-auto-scale
-version: @chart.this.version@
+version: ${chart.this.version}
