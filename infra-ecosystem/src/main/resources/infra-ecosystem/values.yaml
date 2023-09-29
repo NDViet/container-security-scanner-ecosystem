@@ -7,6 +7,7 @@ tags:
   autoscaler: false
   docker-registry: true
   chartmuseum: true
+  jenkins: true
 
 anchore-engine:
   #enabled: true
@@ -63,6 +64,7 @@ docker-registry:
     size: 50Gi
 
 chartmuseum:
+  # enabled: true
   env:
     open:
       ENABLE_METRICS: true
@@ -95,8 +97,8 @@ swaggerui:
     #enabled: false
 
 kube-prometheus-stack:
-  fullnameOverride: monitoring
   #enabled: true
+  fullnameOverride: monitoring
   alertmanager:
     enabled: true
   grafana:
@@ -195,7 +197,7 @@ anchore-auto-scale:
           threshold: "1"
 
 jenkins:
-  enabled: true
+  #enabled: true
   persistence:
     enabled: true
     size: "50Gi"

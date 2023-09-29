@@ -32,10 +32,13 @@ dependencies:
   repository: ${chart.swaggerui.repository}
   version: ${chart.swaggerui.version}
 
-- condition: jenkinsci.enabled
+- condition: jenkins.enabled
   name: ${chart.jenkins.name}
   repository: ${chart.jenkins.repository}
   version: ${chart.jenkins.version}
+  tags:
+    - full
+    - jenkins
 
 - condition: docker-registry.enabled
   name: ${chart.docker-registry.name}
