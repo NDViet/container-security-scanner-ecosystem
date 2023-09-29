@@ -37,6 +37,9 @@
         <chart.docker-registry.name>docker-registry</chart.docker-registry.name>
         <chart.docker-registry.repository>https://helm.twun.io</chart.docker-registry.repository>
         <chart.docker-registry.version>2.2.2</chart.docker-registry.version>
+        <helm.chart.chartmuseum.name>chartmuseum</helm.chart.chartmuseum.name>
+        <helm.chart.chartmuseum.url>https://chartmuseum.github.io/charts</helm.chart.chartmuseum.url>
+        <helm.chart.chartmuseum.version>3.10.1</helm.chart.chartmuseum.version>
         <chart.anchore-engine.name>anchore-engine</chart.anchore-engine.name>
         <chart.anchore-engine.repository>https://charts.anchore.io</chart.anchore-engine.repository>
         <chart.anchore-engine.version>1.27.2</chart.anchore-engine.version>

@@ -54,6 +54,10 @@
                                     <arg value="${exec.overrides}"/>
                                     <arg value="helm repo add ${chart.pts-stack.name} ${chart.pts-stack.repository}"/>
                                 </exec>
+                                <exec executable="${exec.executable}">
+                                    <arg value="${exec.overrides}"/>
+                                    <arg value="helm repo add ${helm.chart.chartmuseum.name} ${helm.chart.chartmuseum.url}"/>
+                                </exec>
                             </target>
                         </configuration>
                         <goals>

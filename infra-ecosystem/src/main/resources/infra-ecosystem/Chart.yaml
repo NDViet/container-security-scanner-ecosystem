@@ -45,6 +45,14 @@ dependencies:
     - full
     - docker-registry
 
+- condition: chartmuseum.enabled
+  name: chartmuseum
+  repository: ${helm.chart.chartmuseum.url}
+  version: ${helm.chart.chartmuseum.version}
+  tags:
+    - full
+    - chartmuseum
+
 - condition: anchore-engine.enabled
   name: ${chart.anchore-engine.name}
   repository: ${chart.anchore-engine.repository}
